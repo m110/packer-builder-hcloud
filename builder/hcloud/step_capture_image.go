@@ -40,7 +40,7 @@ func (s *stepCaptureImage) Run(state multistep.StateBag) multistep.StepAction {
 		return multistep.ActionHalt
 	}
 
-	ui.Say(fmt.Sprintf("Created image: %s ID: %s", result.Image.Name, result.Image.ID))
+	ui.Say(fmt.Sprintf("Created image: %s ID: %d", result.Image.Name, result.Image.ID))
 
 	return multistep.ActionContinue
 }
