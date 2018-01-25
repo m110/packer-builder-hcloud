@@ -1,0 +1,139 @@
+hash: 6a99f782a89d036203e087d342d2702ac03a17beba45fd0762cf750a24dbf0ad
+updated: 2018-01-25T22:50:47.518625396+01:00
+imports:
+- name: github.com/Azure/go-ntlmssp
+  version: c92175d540060095c69ced311f76aea56c83ecdb
+- name: github.com/ChrisTrenkamp/goxpath
+  version: c385f95c6022e7756e91beac5f5510872f7dcb7d
+  subpackages:
+  - internal/execxp
+  - internal/execxp/findutil
+  - internal/execxp/intfns
+  - internal/xsort
+  - lexer
+  - parser
+  - parser/pathexpr
+  - tree
+  - tree/xmltree
+  - tree/xmltree/xmlbuilder
+  - tree/xmltree/xmlele
+  - tree/xmltree/xmlnode
+  - xconst
+- name: github.com/dylanmei/iso8601
+  version: 2075bf119b58e5576c6ed9f867b8f3d17f2e54d4
+- name: github.com/dynport/gossh
+  version: 122e3ee2a6b0c4927d707b579983341d5ac33a66
+- name: github.com/hashicorp/errwrap
+  version: 7554cd9344cec97297fa6649b055a8c98c2a1e55
+- name: github.com/hashicorp/go-checkpoint
+  version: 1545e56e46dec3bba264e41fde2c1e2aa65b5dd4
+- name: github.com/hashicorp/go-cleanhttp
+  version: d5fe4b57a186c716b0e00b8c301cbd9b4182694d
+- name: github.com/hashicorp/go-multierror
+  version: b7773ae218740a7be65057fc60b366a49b538a44
+- name: github.com/hashicorp/go-uuid
+  version: 64130c7a86d732268a38cb04cfbaf0cc987fda98
+- name: github.com/hashicorp/go-version
+  version: 4fe82ae3040f80a03d04d2cccb5606a626b8e1ee
+- name: github.com/hashicorp/packer
+  version: 9698d7283f790aa1d3755ccbd95a1a1cdea9390a
+  subpackages:
+  - common
+  - common/ssh
+  - common/uuid
+  - communicator/none
+  - communicator/ssh
+  - communicator/winrm
+  - helper/communicator
+  - helper/config
+  - packer
+  - packer/plugin
+  - packer/rpc
+  - template
+  - template/interpolate
+  - version
+- name: github.com/hashicorp/yamux
+  version: 683f49123a33db61abfb241b7ac5e4af4dc54d55
+- name: github.com/hetznercloud/hcloud-go
+  version: 8ba5ecb6e802d98c3b7a65f755a240cbe79bebea
+  subpackages:
+  - hcloud
+  - hcloud/schema
+- name: github.com/kr/fs
+  version: 2788f0dbd16903de03cb8186e5c7d97b69ad387b
+- name: github.com/masterzen/azure-sdk-for-go
+  version: ee4f0065d00cd12b542f18f5bc45799e88163b12
+  subpackages:
+  - core/http
+  - core/tls
+- name: github.com/masterzen/simplexml
+  version: 4572e39b1ab9fe03ee513ce6fc7e289e98482190
+  subpackages:
+  - dom
+- name: github.com/masterzen/winrm
+  version: a2df6b1315e6fd5885eb15c67ed259e85854125f
+  subpackages:
+  - soap
+- name: github.com/mitchellh/go-fs
+  version: 7bae45d9a684750e82b97ff320c82556614e621b
+  subpackages:
+  - fat
+- name: github.com/mitchellh/iochan
+  version: 87b45ffd0e9581375c491fef3d32130bb15c5bd7
+- name: github.com/mitchellh/mapstructure
+  version: b4575eea38cca1123ec2dc90c26529b5c5acfcff
+- name: github.com/mitchellh/multistep
+  version: 391576a156a54cfbb4cf5d5eda40cf6ffa3e3a4d
+- name: github.com/mitchellh/reflectwalk
+  version: 63d60e9d0dbc60cf9164e6510889b0db6683d98c
+- name: github.com/nu7hatch/gouuid
+  version: 179d4d0c4d8d407a32af483c2354df1d2c91e6c3
+- name: github.com/packer-community/winrmcp
+  version: 81144009af586de8e7729b829266f09dd0d59701
+  subpackages:
+  - winrmcp
+- name: github.com/pkg/errors
+  version: 645ef00459ed84a119197bfb8d8205042c6df63d
+- name: github.com/pkg/sftp
+  version: f128182572e94e33e79e4f91e01177409e5353d8
+- name: github.com/ugorji/go
+  version: 9831f2c3ac1068a78f50999a30db84270f647af6
+  subpackages:
+  - codec
+- name: golang.org/x/crypto
+  version: 3d37316aaa6bd9929127ac9a527abf408178ea7b
+  subpackages:
+  - curve25519
+  - ed25519
+  - ed25519/internal/edwards25519
+  - internal/chacha20
+  - md4
+  - poly1305
+  - ssh
+  - ssh/agent
+- name: golang.org/x/net
+  version: 0ed95abb35c445290478a5348a7b38bb154135fd
+  subpackages:
+  - html
+  - html/atom
+  - html/charset
+  - proxy
+- name: golang.org/x/text
+  version: e19ae1496984b1c655b8044a65c0300a3c878dd3
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/htmlindex
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/japanese
+  - encoding/korean
+  - encoding/simplifiedchinese
+  - encoding/traditionalchinese
+  - encoding/unicode
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+testImports: []
