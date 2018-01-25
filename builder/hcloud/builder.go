@@ -61,6 +61,10 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 		errs = packer.MultiErrorAppend(errs, errors.New("Missing source image"))
 	}
 
+	if b.config.Comm.SSHPrivateKey == "" {
+		errs = packer.MultiErrorAppend(errs, errors.New("Missing private key"))
+	}
+
 	if len(errs.Errors) > 0 {
 		return nil, errors.New(errs.Error())
 	}
@@ -78,6 +82,9 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 	state.Put("ui", ui)
 
 	steps := []multistep.Step{
+		&stepCreateSSHKey{
+			PrivateKeyFile: b.config.Comm.SSHPrivateKey,
+		},
 		new(stepCreateInstance),
 		new(stepWaitForInstance),
 		&communicator.StepConnect{

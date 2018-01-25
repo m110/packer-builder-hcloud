@@ -2,8 +2,6 @@ package hcloud
 
 import (
 	"context"
-	"log"
-
 	"time"
 
 	"github.com/hashicorp/packer/packer"
@@ -25,7 +23,7 @@ func (s *stepWaitForInstance) Run(state multistep.StateBag) multistep.StepAction
 	ctx := context.Background()
 
 	for {
-		log.Printf("Checking server status...")
+		ui.Say("Checking server status...")
 
 		server, _, err := client.Server.GetByID(ctx, serverID)
 		if err != nil {
@@ -38,7 +36,7 @@ func (s *stepWaitForInstance) Run(state multistep.StateBag) multistep.StepAction
 			break
 		}
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(3 * time.Second)
 	}
 
 	return multistep.ActionContinue

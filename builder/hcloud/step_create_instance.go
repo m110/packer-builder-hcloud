@@ -44,10 +44,11 @@ func (s *stepCreateInstance) Run(state multistep.StateBag) multistep.StepAction 
 		return multistep.ActionHalt
 	}
 
-	ui.Say("Creating new server")
+	name := fmt.Sprintf("packer-hcloud-%d", time.Now().Unix())
+	ui.Say(fmt.Sprintf("Creating new server: %s", name))
 
 	serverData, _, err := client.Server.Create(ctx, hcloud.ServerCreateOpts{
-		Name:       fmt.Sprintf("packer-hcloud-%s", time.Now().Unix()),
+		Name:       name,
 		ServerType: serverType,
 		Image:      sourceImage,
 		SSHKeys:    []*hcloud.SSHKey{sshKey},
