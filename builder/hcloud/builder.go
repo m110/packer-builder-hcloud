@@ -1,11 +1,12 @@
 package hcloud
 
 import (
+	"fmt"
+
 	"github.com/hashicorp/packer/common"
 	"github.com/hashicorp/packer/helper/communicator"
 	"github.com/hashicorp/packer/helper/config"
 	"github.com/hashicorp/packer/packer"
-	"github.com/hashicorp/packer/template/interpolate"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/mitchellh/multistep"
 	"github.com/pkg/errors"
@@ -13,23 +14,9 @@ import (
 
 const BuilderID = "packer.hcloud"
 
-type Config struct {
-	common.PackerConfig `mapstructure:",squash"`
-	Comm                communicator.Config `mapstructure:",squash"`
-
-	Token      string `mapstructure:"token"`
-	ServerType string `mapstructure:"server_type"`
-
-	ImageName   string `mapstructure:"image_name"`
-	SourceImage string `mapstructure:"source_image"`
-
-	SSHKey string `mapstructure:"ssh_key"`
-
-	ctx interpolate.Context
-}
-
 type Builder struct {
 	config Config
+	runner multistep.Runner
 }
 
 func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
@@ -91,11 +78,11 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 		new(stepWaitForImage),
 	}
 
-	runner := common.NewRunner(steps, b.config.PackerConfig, ui)
-	runner.Run(state)
+	b.runner = common.NewRunner(steps, b.config.PackerConfig, ui)
+	b.runner.Run(state)
 
-	// If there was an error, return that
 	if rawErr, ok := state.GetOk("error"); ok {
+		ui.Error(fmt.Sprintf("Got state error: %s", rawErr.(error)))
 		return nil, rawErr.(error)
 	}
 
@@ -108,5 +95,7 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 }
 
 func (b *Builder) Cancel() {
-
+	if b.runner != nil {
+		b.runner.Cancel()
+	}
 }

@@ -15,7 +15,7 @@ func (s *stepWaitForImage) Run(state multistep.StateBag) multistep.StepAction {
 	client := state.Get("client").(*hcloud.Client)
 	ui := state.Get("ui").(packer.Ui)
 
-	imageID := state.Get("imageID").(int)
+	imageID := state.Get("image_id").(int)
 
 	ctx := context.Background()
 

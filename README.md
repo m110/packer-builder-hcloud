@@ -2,7 +2,7 @@
 [Packer](https://packer.io/) builder plugin for [Hetzner Cloud](https://hetzner.cloud/).
 
 This plugin can be used to build provisioned images (snapshots) for Hetzner Cloud.
-Those can be later used for rapid deploying using [Terraform](https://terraform.io/) (check the [official plugin](https://github.com/hetznercloud/terraform-provider-hcloud).
+Those can be later used for rapid deploying using [Terraform](https://terraform.io/) (check the [official plugin](https://github.com/hetznercloud/terraform-provider-hcloud)).
 
 # Building
 
