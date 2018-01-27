@@ -61,10 +61,6 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 		errs = packer.MultiErrorAppend(errs, errors.New("Missing source image"))
 	}
 
-	if b.config.Comm.SSHPrivateKey == "" {
-		errs = packer.MultiErrorAppend(errs, errors.New("Missing private key"))
-	}
-
 	if len(errs.Errors) > 0 {
 		return nil, errors.New(errs.Error())
 	}
@@ -82,11 +78,9 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 	state.Put("ui", ui)
 
 	steps := []multistep.Step{
-		&stepCreateSSHKey{
-			PrivateKeyFile: b.config.Comm.SSHPrivateKey,
-		},
-		new(stepCreateInstance),
-		new(stepWaitForInstance),
+		&stepCreateSSHKey{},
+		new(stepCreateServer),
+		new(stepWaitForServer),
 		&communicator.StepConnect{
 			Config:    &b.config.Comm,
 			Host:      commHost,
@@ -94,14 +88,20 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 		},
 		new(common.StepProvision),
 		new(stepCaptureImage),
+		new(stepWaitForImage),
 	}
 
-	runner := multistep.BasicRunner{Steps: steps}
+	runner := common.NewRunner(steps, b.config.PackerConfig, ui)
 	runner.Run(state)
 
+	// If there was an error, return that
+	if rawErr, ok := state.GetOk("error"); ok {
+		return nil, rawErr.(error)
+	}
+
 	artifact := &Artifact{
-		imageID:   "",
-		imageName: "",
+		imageID:   state.Get("image_id").(int),
+		imageName: state.Get("image_name").(string),
 	}
 
 	return artifact, nil

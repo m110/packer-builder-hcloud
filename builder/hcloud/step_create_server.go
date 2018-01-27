@@ -2,9 +2,7 @@ package hcloud
 
 import (
 	"context"
-
 	"fmt"
-
 	"time"
 
 	"github.com/hashicorp/packer/packer"
@@ -12,11 +10,11 @@ import (
 	"github.com/mitchellh/multistep"
 )
 
-type stepCreateInstance struct {
-	instanceID int
+type stepCreateServer struct {
+	serverID int
 }
 
-func (s *stepCreateInstance) Run(state multistep.StateBag) multistep.StepAction {
+func (s *stepCreateServer) Run(state multistep.StateBag) multistep.StepAction {
 	client := state.Get("client").(*hcloud.Client)
 	config := state.Get("config").(Config)
 	ui := state.Get("ui").(packer.Ui)
@@ -37,7 +35,9 @@ func (s *stepCreateInstance) Run(state multistep.StateBag) multistep.StepAction 
 		return multistep.ActionHalt
 	}
 
-	sshKey, _, err := client.SSHKey.Get(ctx, config.SSHKey)
+	sshKeyID := state.Get("ssh_key_id").(int)
+
+	sshKey, _, err := client.SSHKey.GetByID(ctx, sshKeyID)
 	if err != nil {
 		ui.Error(err.Error())
 		state.Put("error", err)
@@ -65,26 +65,26 @@ func (s *stepCreateInstance) Run(state multistep.StateBag) multistep.StepAction 
 	}
 
 	state.Put("server_data", serverData)
-	s.instanceID = serverData.Server.ID
+	s.serverID = serverData.Server.ID
 
-	ui.Say(fmt.Sprintf("Crated server %d", s.instanceID))
+	ui.Say(fmt.Sprintf("Created server %d", s.serverID))
 
 	return multistep.ActionContinue
 }
 
-func (s *stepCreateInstance) Cleanup(state multistep.StateBag) {
+func (s *stepCreateServer) Cleanup(state multistep.StateBag) {
 	client := state.Get("client").(*hcloud.Client)
 	ui := state.Get("ui").(packer.Ui)
 
-	if s.instanceID <= 0 {
+	if s.serverID <= 0 {
 		return
 	}
 
-	ui.Say(fmt.Sprintf("Waiting for server %d to be destroyed...", s.instanceID))
+	ui.Say(fmt.Sprintf("Waiting for server %d to be destroyed...", s.serverID))
 
 	ctx := context.Background()
 
-	server, _, err := client.Server.GetByID(ctx, s.instanceID)
+	server, _, err := client.Server.GetByID(ctx, s.serverID)
 
 	_, err = client.Server.Delete(ctx, server)
 	if err != nil {

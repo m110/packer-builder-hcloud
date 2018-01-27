@@ -9,9 +9,9 @@ import (
 	"github.com/mitchellh/multistep"
 )
 
-type stepWaitForInstance struct{}
+type stepWaitForServer struct{}
 
-func (s *stepWaitForInstance) Run(state multistep.StateBag) multistep.StepAction {
+func (s *stepWaitForServer) Run(state multistep.StateBag) multistep.StepAction {
 	client := state.Get("client").(*hcloud.Client)
 	ui := state.Get("ui").(packer.Ui)
 
@@ -23,8 +23,6 @@ func (s *stepWaitForInstance) Run(state multistep.StateBag) multistep.StepAction
 	ctx := context.Background()
 
 	for {
-		ui.Say("Checking server status...")
-
 		server, _, err := client.Server.GetByID(ctx, serverID)
 		if err != nil {
 			ui.Error(err.Error())
@@ -42,6 +40,6 @@ func (s *stepWaitForInstance) Run(state multistep.StateBag) multistep.StepAction
 	return multistep.ActionContinue
 }
 
-func (s *stepWaitForInstance) Cleanup(state multistep.StateBag) {
+func (s *stepWaitForServer) Cleanup(state multistep.StateBag) {
 
 }

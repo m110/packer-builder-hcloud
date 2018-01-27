@@ -15,8 +15,8 @@ func commHost(state multistep.StateBag) (string, error) {
 
 func sshConfig(state multistep.StateBag) (*ssh.ClientConfig, error) {
 	config := state.Get("config").(Config)
+	privateKey := state.Get("private_key").(string)
 
-	privateKey := state.Get("ssh_private_key").(string)
 	signer, err := ssh.ParsePrivateKey([]byte(privateKey))
 	if err != nil {
 		return nil, fmt.Errorf("Error setting up SSH config: %s", err)
