@@ -74,6 +74,8 @@ func (b *Builder) Run(ui packer.Ui, hook packer.Hook, cache packer.Cache) (packe
 			SSHConfig: sshConfig,
 		},
 		new(common.StepProvision),
+		new(stepShutdown),
+		new(stepPowerOff),
 		new(stepCaptureImage),
 		new(stepWaitForImage),
 	}

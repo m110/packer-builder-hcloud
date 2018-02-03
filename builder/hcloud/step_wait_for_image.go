@@ -19,7 +19,9 @@ func (s *stepWaitForImage) Run(state multistep.StateBag) multistep.StepAction {
 
 	ctx := context.Background()
 
-	waiter := NewWaiter(client, 2*time.Minute)
+	ui.Say("Waiting for the image to be available...")
+
+	waiter := NewWaiter(client, 5*time.Minute)
 	err := waiter.WaitForImage(ctx, imageID, hcloud.ImageStatusAvailable)
 	if err != nil {
 		ui.Error(err.Error())

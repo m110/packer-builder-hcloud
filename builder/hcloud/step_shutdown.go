@@ -2,24 +2,25 @@ package hcloud
 
 import (
 	"context"
-	"fmt"
+	"time"
 
 	"github.com/hashicorp/packer/packer"
 	"github.com/hetznercloud/hcloud-go/hcloud"
 	"github.com/mitchellh/multistep"
 )
 
-type stepCaptureImage struct{}
+type stepShutdown struct{}
 
-func (s *stepCaptureImage) Run(state multistep.StateBag) multistep.StepAction {
+func (s *stepShutdown) Run(state multistep.StateBag) multistep.StepAction {
 	client := state.Get("client").(*hcloud.Client)
-	config := state.Get("config").(Config)
 	ui := state.Get("ui").(packer.Ui)
+
+	ctx := context.Background()
 
 	serverData := state.Get("server_data").(hcloud.ServerCreateResult)
 	serverID := serverData.Server.ID
 
-	ctx := context.Background()
+	ui.Say("Shutting down server...")
 
 	server, _, err := client.Server.GetByID(ctx, serverID)
 	if err != nil {
@@ -28,23 +29,23 @@ func (s *stepCaptureImage) Run(state multistep.StateBag) multistep.StepAction {
 		return multistep.ActionHalt
 	}
 
-	result, _, err := client.Server.CreateImage(ctx, server, &hcloud.ServerCreateImageOpts{
-		Type:        hcloud.ImageTypeSnapshot,
-		Description: &config.ImageName,
-	})
+	_, _, err = client.Server.Shutdown(ctx, server)
 	if err != nil {
 		ui.Error(err.Error())
 		state.Put("error", err)
 		return multistep.ActionHalt
 	}
 
-	state.Put("image_id", result.Image.ID)
-	state.Put("image_name", result.Image.Name)
-
-	ui.Say(fmt.Sprintf("Created image: %s ID: %d", result.Image.Name, result.Image.ID))
+	waiter := NewWaiter(client, 30*time.Second)
+	err = waiter.WaitForServer(ctx, serverID, hcloud.ServerStatusOff)
+	if err != nil {
+		ui.Error(err.Error())
+		state.Put("error", err)
+		return multistep.ActionHalt
+	}
 
 	return multistep.ActionContinue
 }
 
-func (s *stepCaptureImage) Cleanup(state multistep.StateBag) {
+func (s *stepShutdown) Cleanup(multistep.StateBag) {
 }

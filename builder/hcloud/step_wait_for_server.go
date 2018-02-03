@@ -18,9 +18,9 @@ func (s *stepWaitForServer) Run(state multistep.StateBag) multistep.StepAction {
 	serverData := state.Get("server_data").(hcloud.ServerCreateResult)
 	serverID := serverData.Server.ID
 
-	ui.Say("Waiting for the server to become active...")
-
 	ctx := context.Background()
+
+	ui.Say("Waiting for the server to be running...")
 
 	waiter := NewWaiter(client, 2*time.Minute)
 	err := waiter.WaitForServer(ctx, serverID, hcloud.ServerStatusRunning)
