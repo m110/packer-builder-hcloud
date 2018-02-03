@@ -22,24 +22,16 @@ func (s *stepWaitForServer) Run(state multistep.StateBag) multistep.StepAction {
 
 	ctx := context.Background()
 
-	for {
-		server, _, err := client.Server.GetByID(ctx, serverID)
-		if err != nil {
-			ui.Error(err.Error())
-			state.Put("error", err)
-			return multistep.ActionHalt
-		}
-
-		if server.Status == hcloud.ServerStatusRunning {
-			break
-		}
-
-		time.Sleep(3 * time.Second)
+	waiter := NewWaiter(client, 2*time.Minute)
+	err := waiter.WaitForServer(ctx, serverID, hcloud.ServerStatusRunning)
+	if err != nil {
+		ui.Error(err.Error())
+		state.Put("error", err)
+		return multistep.ActionHalt
 	}
 
 	return multistep.ActionContinue
 }
 
 func (s *stepWaitForServer) Cleanup(state multistep.StateBag) {
-
 }
