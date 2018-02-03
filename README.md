@@ -31,6 +31,8 @@ go build -o ~/.packer.d/plugins/packer-builder-hcloud
 }
 ```
 
+See https://github.com/m110/infrastructure-as-code for more complete example.
+
 You can find server types and soure images querying [the API](https://docs.hetzner.cloud/#resources-server-types).
 
 # Known issues
