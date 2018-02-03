@@ -16,5 +16,9 @@ type Config struct {
 	ImageName   string `mapstructure:"image_name"`
 	SourceImage string `mapstructure:"source_image"`
 
+	Location   string `mapstructure:"location"`
+	Datacenter string `mapstructure:"datacenter"`
+	UserData   string `mapstructure:"user_data"`
+
 	ctx interpolate.Context
 }

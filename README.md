@@ -26,6 +26,9 @@ go build -o ~/.packer.d/plugins/packer-builder-hcloud
           "server_type": "cx11",
           "source_image": "ubuntu-16.04",
           "image_name": "some-image",
+          "location": "fsn1",
+          "datacenter": "fsn1-dc8",
+          "user_data": "",
       }
   ]
 }

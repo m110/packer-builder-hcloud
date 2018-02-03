@@ -47,17 +47,37 @@ func (s *stepCreateServer) Run(state multistep.StateBag) multistep.StepAction {
 	name := fmt.Sprintf("packer-hcloud-%d", time.Now().Unix())
 	ui.Say(fmt.Sprintf("Creating new server: %s", name))
 
-	serverData, _, err := client.Server.Create(ctx, hcloud.ServerCreateOpts{
+	serverCreateOpts := hcloud.ServerCreateOpts{
 		Name:       name,
 		ServerType: serverType,
 		Image:      sourceImage,
 		SSHKeys:    []*hcloud.SSHKey{sshKey},
-		// TODO
-		// Location:
-		// Datacenter
-		// UserData
-	})
+		UserData:   config.UserData,
+	}
 
+	if config.Location != "" {
+		location, _, err := client.Location.GetByName(ctx, config.Location)
+		if err != nil {
+			ui.Error(err.Error())
+			state.Put("error", err)
+			return multistep.ActionHalt
+		}
+
+		serverCreateOpts.Location = location
+	}
+
+	if config.Datacenter != "" {
+		datacenter, _, err := client.Datacenter.GetByName(ctx, config.Datacenter)
+		if err != nil {
+			ui.Error(err.Error())
+			state.Put("error", err)
+			return multistep.ActionHalt
+		}
+
+		serverCreateOpts.Datacenter = datacenter
+	}
+
+	serverData, _, err := client.Server.Create(ctx, serverCreateOpts)
 	if err != nil {
 		ui.Error(err.Error())
 		state.Put("error", err)
