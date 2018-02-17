@@ -29,6 +29,7 @@ go build -o ~/.packer.d/plugins/packer-builder-hcloud
           "location": "fsn1",
           "datacenter": "fsn1-dc8",
           "user_data": "",
+          "ssh_username": "root"
       }
   ]
 }
