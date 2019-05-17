@@ -1,3 +1,5 @@
+# DEPRECATED: see official builder here: https://www.packer.io/docs/builders/hetzner-cloud.html
+
 # packer-builder-hcloud
 [Packer](https://packer.io/) builder plugin for [Hetzner Cloud](https://hetzner.cloud/).
 
